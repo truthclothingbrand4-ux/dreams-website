@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOTDREAM</title>
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/1489386325768409246/1491536843458740314/dream.png?ex=69d80d6e&is=69d6bbee&hm=55fe2b9be2514935c462433e11003dfc04c9ae00913486f2412a5d69af17b4f3&">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        #intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: #fff;
+            font-size: 2em;
+        }
+        #intro button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 10px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+        #intro button:hover {
+            background-color: #0056b3;
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-12px);
+            }
+            50% {
+                transform: translateY(0);
+            }
+            75% {
+                transform: translateY(-6px);
+            }
+        }
+        .content {
+            display: none;
+        }
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .header {
+            font-size: 3em;
+            color: #fff;
+            margin: 0;
+        }
+        .header-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: none;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.25);
+        }
+        .spotify-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            background: rgba(12, 12, 12, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            padding: 18px 26px;
+            backdrop-filter: blur(14px);
+            margin: 20px auto 30px;
+            max-width: 780px;
+            position: relative;
+            overflow: hidden;
+        }
+        .spotify-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ffffff;
+            animation: progressBar 180s linear infinite;
+        }
+        @keyframes progressBar {
+            0% {
+                transform: scaleX(0);
+                transform-origin: left;
+            }
+            100% {
+                transform: scaleX(1);
+                transform-origin: left;
+            }
+        }
+        .spotify-cover {
+            width: 108px;
+            height: 108px;
+            border-radius: 20px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        }
+        .spotify-info {
+            text-align: left;
+            color: #fff;
+            display: grid;
+            gap: 6px;
+        }
+        .spotify-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #b3b3b3;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+        .spotify-icon {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #1db954;
+            color: #000;
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+        }
+        .spotify-info h2 {
+            font-size: 1.6em;
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+        .spotify-info p {
+            margin: 0;
+            color: #b3b3b3;
+            font-size: 0.95em;
+        }
+        .spotify-badge {
+            font-size: 0.75em;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #1db954;
+            margin-top: 10px;
+        }
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #ccc;
+        }
+        button {
+            background: linear-gradient(135deg, #ffffff, #000000);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 38px rgba(0, 0, 0, 0.35);
+            opacity: 0.95;
+        }
+        button a {
+            color: #000;
+            text-decoration: none;
+        }
+        .banner {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+        .profile {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px;
+            border: 2px solid #fff;
+        }
+        .past-work {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        .project {
+            margin: 20px;
+            text-align: center;
+            color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .project:hover {
+            transform: scale(1.05);
+        }
+        .project img {
+            width: 520px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.35), 0 0 80px rgba(0, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: zoom-in;
+        }
+        .project p {
+            display: none;
+        }
+        .links {
+            margin-top: 40px;
+            color: #fff;
+        }
+        .links ul {
+            list-style: none;
+            padding: 0;
+        }
+        .links li {
+            display: inline;
+            margin: 0 15px;
+        }
+        .links a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <div>
+            <h1>Welcome to NOTDREAM</h1>
+            <button onclick="enterSite()">Click to Enter</button>
+        </div>
+    </div>
+    <div id="video-player" style="display:none;"></div>
+    <div class="content" id="main-content">
+        <div id="home">
+            <div class="header-row">
+                <h1 class="header">NOTDREAM</h1>
+                <img class="header-avatar" src="https://cdn.discordapp.com/attachments/1489386325768409246/1491536843458740314/dream.png?ex=69d80d6e&is=69d6bbee&hm=55fe2b9be2514935c462433e11003dfc04c9ae00913486f2412a5d69af17b4f3&" alt="Dream Avatar">
+            </div>
+            <div class="spotify-card">
+                <img class="spotify-cover" src="https://img.freepik.com/premium-photo/rain-falling-calm-river-forest-with-green-trees-either-side_885831-131818.jpg" alt="Now playing cover">
+                <div class="spotify-info">
+                    <div class="spotify-top">
+                        <span class="spotify-icon">▶</span>
+                        <span>Now playing</span>
+                    </div>
+                    <h2>Dream Playlist</h2>
+                </div>
+            </div>
+            <p class="subtitle">Creative Designer & Developer</p>
+            <p>NOTDREAM Creative Designer & Developer</p>
+            <button onclick="document.getElementById('work').scrollIntoView({behavior: 'smooth'})">Explore Work</button>
+            <button><a href="https://discord.com/users/1434192534900572294">Get in Touch</a></button>
+        </div>
+        <div id="work">
+            <h1 style="font-size: 4em; margin-top: 0;">BANNERS</h1>
+            <div class="past-work">
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489358124530794528/1489362976749387876/DASHBOARD_49.png?ex=69d7651c&is=69d6139c&hm=7261d6d9a65c48e114a848fce937c25db5d2c931d6ffbb3cb30186819e199707&" alt="Banner 1">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491533006253592807/ASSISTANCE_27.png?ex=69d809dc&is=69d6b85c&hm=9af740a17351c7c16935e3cb0695c772d3bd2e1f45b19c1cfc963569fa93f873&" alt="Banner 2">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491533201636720660/ASSISTANCE_20.png?ex=69d80a0a&is=69d6b88a&hm=74d0c0bbd5ee0fb1844878667d851dc1796b33861ca4089a53fa50c85f66d28e&" alt="Banner 3">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1462792363763302453/1488721177668223178/DASHBOARD_43.png?ex=69d7b263&is=69d660e3&hm=9af2b7fda1f45101de01955a67a242e94e6da0cc6d65c047d2772f676c35b396&" alt="Banner 4">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1462792363763302453/1491210466112831517/ASSISTANCE.png?ex=69d78638&is=69d634b8&hm=18d48e46a574de6e34d4e470ff21b76ba32a8c722c2f2ae5f418cb3ed7924c1c&" alt="Banner 5">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491545557427290192/ASSISTANCE.png?ex=69d8158c&is=69d6c40c&hm=a243dd3b041be0e83fa8cb3c92e9efe449c29f0028f6ccae17b33eada8597d93&" alt="Banner 6">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491545567904665601/Dashboard_-_1.png?ex=69d8158e&is=69d6c40e&hm=e11bb43d0e7db784981e8a0d1bff84ab088865af4eea7b86cc5bbd5572c83945&" alt="Banner 7">
+                </div>
+            </div>
+            <h1 style="font-size: 4em; margin-top: 40px;">EMBEDS</h1>
+            <div class="past-work">
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491534781404418363/Screenshot_2026-04-08_162455.png?ex=69d80b83&is=69d6ba03&hm=c80035693e672adc12d22b6a4a1201db4434d4c04a34946896ca26fd86dbe2e0&" alt="Embed 1">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491534799121416325/Screenshot_2026-04-08_162432.png?ex=69d80b87&is=69d6ba07&hm=5bf10c74fef5a852ae6a4c0317ac7ca5113b6fa7afba82fe91d4a3c4886c6f71&" alt="Embed 2">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491534817274368270/Screenshot_2026-04-08_162413.png?ex=69d80b8b&is=69d6ba0b&hm=97b399b5bcbdedc74c32c0ced60d20553975ffaa24703343b647cf68c946af3a&" alt="Embed 3">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491534834517151835/Screenshot_2026-04-08_162401.png?ex=69d80b8f&is=69d6ba0f&hm=e4cef1153582b62621ecfaf6972a41bb6c25abdd3ce58cb2b4ee4d31fb3d0cc1&" alt="Embed 4">
+                </div>
+                <div class="project">
+                    <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491534856662810696/Screenshot_2026-04-08_162336.png?ex=69d80b95&is=69d6ba15&hm=ccdc1e93f9486abd2e4ad43804f2853c9d05540466e47578510433e83f982941&" alt="Embed 5">
+                </div>
+            </div>
+        </div>
+        <h1 style="font-size: 4em; margin-top: 40px;">LOGOS</h1>
+        <div class="past-work">
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491612493124993145/BEAT.png?ex=69d853e3&is=69d70263&hm=5d42cf540af5b0e180110f3520aaaf8917cc1107a2b40b5f24151fd4df14dd83&" alt="Logo 1">
+            </div>
+        </div>
+        <h1 style="font-size: 4em; margin-top: 40px;">GFX BANNERS</h1>
+        <div class="past-work">
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491544913588916418/L_3.png?ex=69d814f2&is=69d6c372&hm=82bf22b03857a6a50b03361f66a1f0a9bd527868f45b86381b7856de7f500c54&" alt="GFX Banner 1">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491612700206432276/Los_Angeles_19.png?ex=69d85414&is=69d70294&hm=1bf5cdaad10c9f88be5c10b86312c13a60427f2ff7570ab27f2649be4c75c6ce&" alt="GFX Banner 2">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491612779361206292/Roleplay_1.png?ex=69d85427&is=69d702a7&hm=2c45edbcd33b5d90b68d95265f0e9784240024854a373036add39e14a35daf33&" alt="GFX Banner 3">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491615092180254720/Los_Angeles_20.png?ex=69d8564e&is=69d704ce&hm=ea81858322b1994785798d7fc550a27ec8aa25744bdf5f6f7a0a2d634c268fd4&" alt="GFX Banner 4">
+            </div>
+        </div>
+        <h1 style="font-size: 4em; margin-top: 40px;">FEEDBACK</h1>
+        <div class="past-work">
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616027296137389/Screenshot_2026-04-08_214758.png?ex=69d8572d&is=69d705ad&hm=3c5930f0d23291017b2e20a1bdd3d5a3245d24d7268f07e467d6d24e42811c9d&" alt="Feedback 1">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616040625639545/Screenshot_2026-04-08_214745.png?ex=69d85730&is=69d705b0&hm=29ec3c3e4fe95219959ac14b0e8ffac74fd1a50ddd8ccb4709e9313bfab0de45&" alt="Feedback 2">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616052310835281/Screenshot_2026-04-08_214736.png?ex=69d85733&is=69d705b3&hm=eddd5f8d2f93830605793ed29bd9a3fa254cb0dbddd76a025b833ebe8915cc2b&" alt="Feedback 3">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616065078431817/Screenshot_2026-04-08_214722.png?ex=69d85736&is=69d705b6&hm=4a155862a7a1493b408865a183b24ae2633a4e62c35d96407bc4bdbbbf37bb1f&" alt="Feedback 4">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616084543934494/Screenshot_2026-04-08_214709.png?ex=69d8573b&is=69d705bb&hm=16a2dac4747222b639125cd909581f8da8a68162035cc19fe88411a2be9472f8&" alt="Feedback 5">
+            </div>
+            <div class="project">
+                <img src="https://cdn.discordapp.com/attachments/1489386325768409246/1491616245139902474/Screenshot_2026-04-08_214652.png?ex=69d85761&is=69d705e1&hm=4e9558648d5a04ce46eafff26b7ece23c27c0829637dbb910a41c8b76bbfad2a&" alt="Feedback 6">
+            </div>
+        </div>
+        <div class="links">
+            <h2>Additional Links</h2>
+            <ul>
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#work">WORK</a></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        function enterSite() {
+            const player = document.getElementById('video-player');
+            if (!player.innerHTML.trim()) {
+                player.innerHTML = `
+                    <iframe
+                        width="0"
+                        height="0"
+                        src="https://www.youtube.com/embed/Ctf-EIBR2YU?list=RDCtf-EIBR2YU&autoplay=1&controls=0&rel=0&showinfo=0&modestbranding=1"
+                        title="YouTube playlist player"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen>
+                    </iframe>
+                `;
+                player.style.display = 'block';
+            }
+
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
